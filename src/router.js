@@ -13,6 +13,7 @@ const routes = [
   {
     path: '/', component: Sidenav, meta: { requiresAuth: true },
     children: [
+      { path: '', redirect: Home},
       { path: '/about', name: 'about', component: About },
       { path: '/home', name: 'home', component: Home }
     ]
