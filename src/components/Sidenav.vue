@@ -38,10 +38,10 @@
         </v-btn>
         <v-list>
           <v-list-tile>
-            <v-list-tile-title @click="$router.push('/cuenta')">Mi cuenta</v-list-tile-title>
+            <v-list-tile-title style="cursor: pointer" @click="$router.push('/cuenta')">Mi cuenta</v-list-tile-title>
           </v-list-tile>
           <v-list-tile>
-            <v-list-tile-title @click="logout()">Cerrar sesión</v-list-tile-title>
+            <v-list-tile-title style="cursor: pointer" @click="logout()">Cerrar sesión</v-list-tile-title>
           </v-list-tile>
         </v-list>
       </v-menu>
