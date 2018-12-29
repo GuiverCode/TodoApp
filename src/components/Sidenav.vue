@@ -82,9 +82,8 @@ export default {
   },
   methods: {
     logout() {
-      //TODO: Cerrar Sesion
-      //this.$store.dispatch('logout');
-      //this.$router.push('/login');
+      this.$store.dispatch('logout');
+      this.$router.push('/login');
     }
   }
 };
