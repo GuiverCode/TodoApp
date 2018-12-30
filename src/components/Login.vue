@@ -1,12 +1,12 @@
 <template>
   <v-app id="inspire">
-    <v-content column class="text-xs-center">
+    <v-content >
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
-          <v-flex xs6 sm6 md6>
-            <v-card class="elevation-12">
+          <v-flex xs12 sm8 md4>
+            <v-card class="elevation-12" style="margin-bottom:250px" >
               <v-toolbar dark color="primary">
-                <v-toolbar-title style="justify-content: center">Todo - Inicio de sesión</v-toolbar-title>
+                <v-toolbar-title>Todo - Inicio de sesión</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
