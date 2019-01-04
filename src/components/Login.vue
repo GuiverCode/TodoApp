@@ -58,7 +58,8 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import { SET_TOKEN } from "../store-mutations";
+import { SET_TOKEN } from "../plugins/store-mutations";
+import { SET_USER } from "../plugins/store-mutations";
 
 export default {
   name: "Login",
@@ -94,8 +95,10 @@ export default {
           .then(
             res => {
               if (res.token) {
+                //setea usuario
+                this.$store.commit(SET_USER, res.usuario);
+                //setea token
                 this.$store.commit(SET_TOKEN, res.token);
-                //window.console.log(window.localStorage.getItem('TodoToken'));
                 this.$router.push("/");
               } else {
                 this.snackbar.message = "Verifique el usuario y la contraseña";
@@ -123,10 +126,13 @@ export default {
     },
 
     loginAuth() {
-      const token = this.$store.getters.token;
+      //verifica si hay usuario logeado
+      const token = this.$store.getters.isLoggedIn;
       if (!token) {
+        //sino se redirige al login
         this.$router.push("/login");
       } else {
+        //si hay, se redirige a home
         this.$router.push("/");
       }
     }

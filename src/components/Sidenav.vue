@@ -9,7 +9,7 @@
       :clipped="$vuetify.breakpoint.mdAndUp"
     >
       <v-list dense class="pt-0">
-        <v-list-tile v-for="item in items" :key="item.title" :to="'/'+item.value">
+        <v-list-tile v-for="item in items" :key="item.title" :to="'/'+item.link">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -64,8 +64,9 @@ export default {
   data: () => ({
     title: "Todo App",
     items: [
-      { title: "Home", value: "home", icon: "dashboard" },
-      { title: "About", value: "about", icon: "question_answer" }
+      { title: "Pendientes", link: "home", icon: "assignment" },
+      { title: "Completadas", link: "about", icon: "check_circle" },
+       {title: "Archivadas", link: "#", icon: "bookmarks" }
       // aqui van las opciones de la barra lateral
     ],
     drawer: true

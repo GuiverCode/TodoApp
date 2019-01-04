@@ -27,6 +27,7 @@ export default new Vuex.Store({
   actions: {
     logout(context) {
       context.commit(SET_TOKEN, '');
+      context.commit(SET_USER, '');
     },
   }
 });
