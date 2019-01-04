@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Sidenav from './components/Sidenav.vue'
-import Home from './views/Home.vue'
-import About from './views/About.vue'
-import Login from './components/Login.vue'
+import Sidenav from '../components/Sidenav.vue'
+import Home from '../components/Home.vue'
+import About from '../components/About.vue'
+import Login from '../components/Login.vue'
 
 Vue.use(VueRouter);
 
