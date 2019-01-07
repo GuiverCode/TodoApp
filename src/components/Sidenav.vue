@@ -1,15 +1,15 @@
 <template>
   <div class="sidenav-base">
-    
     <v-navigation-drawer
       fixed
-      app
-      mobile-break-point="960"
-      v-model="drawer"
       :clipped="$vuetify.breakpoint.mdAndUp"
+      app
+      v-model="drawer"
+      mobile-break-point="960"
     >
-      <v-list dense class="pt-0">
-        <v-list-tile v-for="item in items" :key="item.title" :to="'/'+item.link">
+      <v-list>
+        <!--:to="{name: item.name}"-->
+        <v-list-tile v-for="item in items" :key="item.title" :to="item.link">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -20,16 +20,16 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-
+    
     <v-toolbar class="main-toolbar white--text" app color="primary" :clipped-left="true">
       <v-toolbar-side-icon @click.stop="drawer = !drawer" class="white--text">
-        <v-icon>menu</v-icon>
+        <!--<v-icon>menu</v-icon>-->
       </v-toolbar-side-icon>
       <v-toolbar-title
         class="app-toolbar-title"
         :class="{'subheading': $vuetify.breakpoint.smAndDown}"
       >
-        <strong>Todo App</strong>
+        <strong>Notas App</strong>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu bottom left v-if="isLoggedIn">
@@ -64,12 +64,11 @@ export default {
   data: () => ({
     title: "Todo App",
     items: [
-      { title: "Pendientes", link: "home", icon: "assignment" },
-      { title: "Completadas", link: "about", icon: "check_circle" },
-       {title: "Archivadas", link: "#", icon: "bookmarks" }
+      { title: "Notas", link: "/notas", icon: "assignment"},
+      { title: "Notificaciones", link: "/about", icon: "notifications"},
       // aqui van las opciones de la barra lateral
     ],
-    drawer: true
+    drawer: null
   }),
   computed: {
     /*hayPersonaSeleccionada() {

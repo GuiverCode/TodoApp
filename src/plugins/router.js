@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Sidenav from '../components/Sidenav.vue'
-import Home from '../components/Home.vue'
+import Notas from '../components/Notas.vue'
 import About from '../components/About.vue'
 import Login from '../components/Login.vue'
 
@@ -13,9 +13,9 @@ const routes = [
   {
     path: '/', component: Sidenav, meta: { requiresAuth: true },
     children: [
-      { path: '', redirect: Home, meta: { requiresAuth: true }},
+      { path: '', redirect: Notas, meta: { requiresAuth: true }},
       { path: '/about', name: 'about', component: About, meta: { requiresAuth: true } },
-      { path: '/home', name: 'home', component: Home, meta: { requiresAuth: true } }
+      { path: '/notas', name: 'notas', component: Notas, meta: { requiresAuth: true } }
     ]
   },
 ];
