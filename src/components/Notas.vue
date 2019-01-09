@@ -66,7 +66,7 @@ export default {
       cargandoNotas: false,
       error: false,
       checkbox: true,
-      idNotaActualizada: -1,
+      notaActualizada: {},
       snackbar: {
         visible: false,
         message: null,
@@ -100,6 +100,33 @@ export default {
     hacerAlgo() {
       window.console.log("Hacer algo");
     },
+    actualizarNota(n) {
+      var id = n.id;
+      let notaActualizada = {};
+
+      notaActualizada.nombre = n.nombre;
+      notaActualizada.descripcion = n.descripcion;
+      notaActualizada.completado = n.completado;
+      notaActualizada.idUsuario = this.usuario.id;
+
+      this.$http
+        .put(`${process.env.VUE_APP_ROOT_API}todo/` + id, notaActualizada)
+        .then(
+          function(response) {
+            this.snackbar.message = notaActualizada.completado
+              ? "Completaste: " + notaActualizada.nombre
+              : "Pendiente: " + notaActualizada.nombre;
+            this.snackbar.visible = true;
+            this.snackbar.color = notaActualizada.completado ? "info" : "green";
+          },
+          () => {
+            this.snackbar.message =
+              "Ocurrió un error. Revise su conexión en inténtelo de nuevo";
+            this.snackbar.visible = true;
+            this.snackbar.color = "error";
+          }
+        );
+    }
   },
   computed: {
     vacio() {
@@ -110,18 +137,26 @@ export default {
     notas: {
       handler(val, oldVal) {
         if (oldVal.length != 0) {
-          //obtenenemos las notas de la bd para actualizar los cambios.
+          // la 1ra vez oldVal esta vacio
           this.$http
             .get(`${process.env.VUE_APP_ROOT_API}todo/user/` + this.usuario.id)
             .then(response => response.json())
             .then(
               notas => {
                 var notasDb = notas;
-                //comparamos las notas actuales con las notas de la bd
-                const index = notasDb.findIndex(function(t, i) {
-                  return t.completado !== val[i].completado;
-                });
-                console.log(index);
+                var n, i, j;
+                // buscamos la nota que acaba de ser actualizada, comparando con la bd.
+                for (i = 0; i < notasDb.length; i++) {
+                  for (j = 0; j < notasDb.length; j++) {
+                    if (
+                      notasDb[i].id == this.notas[j].id &&
+                      notasDb[i].completado != this.notas[j].completado
+                    ) {
+                      n = this.notas[j]; // la nota que cambio de estado
+                    }
+                  }
+                }
+                this.actualizarNota(n);
               },
               () => {
                 this.snackbar.message =
