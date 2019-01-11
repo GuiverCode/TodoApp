@@ -5,7 +5,7 @@
         <v-toolbar-title>Notas</v-toolbar-title>
       </v-toolbar>
 
-      <v-card-text class="text-xs-center" v-if="cargandoNotas">
+      <v-card-text class="text-xs-center" v-if="cargandoTareas">
         <div class="text-xs-center">
           <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </div>
@@ -17,12 +17,12 @@
         <br>Por favor, revise su conexión e intente nuevamente.
       </v-card-text>
 
-      <v-card-text v-else-if="vacio">No hay notas pendientes.</v-card-text>
+      <v-card-text v-else-if="vacio">No hay tareas pendientes.</v-card-text>
 
       <v-card-text v-else>
-        <!--hay notas-->
+        <!--hay tareas-->
         <v-list>
-          <template v-for="(item, index) in notas">
+          <template v-for="(item, index) in tareas">
             <v-list-tile :key="item.id">
               <v-list-tile-action>
                 <v-checkbox v-model="item.completado"></v-checkbox>
@@ -54,7 +54,7 @@
 // @ is an alias to /src
 
 export default {
-  name: "notas",
+  name: "tareas",
   components: {
     //HelloWorld
   },
@@ -62,11 +62,11 @@ export default {
     return {
       usuario: {},
       ok: false,
-      notas: [],
-      cargandoNotas: false,
+      tareas: [],
+      cargandoTareas: false,
       error: false,
       checkbox: true,
-      notaActualizada: {},
+      tareaActualizada: {},
       snackbar: {
         visible: false,
         message: null,
@@ -75,49 +75,51 @@ export default {
     };
   },
   mounted() {
+    // obtiene el usuario logeado
     this.usuario = JSON.parse(window.localStorage.getItem("TodoUser") || null);
+    // obtiene las tareas del usuario
     this.getTareas();
   },
   methods: {
     getTareas() {
-      this.cargandoNotas = true;
+      this.cargandoTareas = true;
       this.$http
         .get(`${process.env.VUE_APP_ROOT_API}todo/user/` + this.usuario.id)
         .then(response => response.json())
         .then(
-          notas => {
-            this.notas = notas;
+          tareas => {
+            this.tareas = tareas;
             this.ok = true;
-            this.cargandoNotas = false;
+            this.cargandoTareas = false;
           },
           () => {
             this.error = true;
-            this.notas = [];
-            this.cargandoNotas = false;
+            this.tareas = [];
+            this.cargandoTareas = false;
           }
         );
     },
     hacerAlgo() {
       window.console.log("Hacer algo");
     },
-    actualizarNota(n) {
+    cambiarEstadoTarea(n) {
       var id = n.id;
-      let notaActualizada = {};
+      let tareaActualizada = {};
 
-      notaActualizada.nombre = n.nombre;
-      notaActualizada.descripcion = n.descripcion;
-      notaActualizada.completado = n.completado;
-      notaActualizada.idUsuario = this.usuario.id;
+      tareaActualizada.nombre = n.nombre;
+      tareaActualizada.descripcion = n.descripcion;
+      tareaActualizada.completado = n.completado;
+      tareaActualizada.idUsuario = this.usuario.id;
 
       this.$http
-        .put(`${process.env.VUE_APP_ROOT_API}todo/` + id, notaActualizada)
+        .put(`${process.env.VUE_APP_ROOT_API}todo/` + id, tareaActualizada)
         .then(
           function(response) {
-            this.snackbar.message = notaActualizada.completado
-              ? "Completaste: " + notaActualizada.nombre
-              : "Pendiente: " + notaActualizada.nombre;
+            this.snackbar.message = tareaActualizada.completado
+              ? "Completaste: " + tareaActualizada.nombre
+              : "Pendiente: " + tareaActualizada.nombre;
             this.snackbar.visible = true;
-            this.snackbar.color = notaActualizada.completado ? "info" : "green";
+            this.snackbar.color = tareaActualizada.completado ? "info" : "green";
           },
           () => {
             this.snackbar.message =
@@ -130,11 +132,11 @@ export default {
   },
   computed: {
     vacio() {
-      return this.ok && this.notas.length == 0;
+      return this.ok && this.tareas.length == 0;
     }
   },
   watch: {
-    notas: {
+    tareas: {
       handler(val, oldVal) {
         if (oldVal.length != 0) {
           // la 1ra vez oldVal esta vacio
@@ -142,21 +144,21 @@ export default {
             .get(`${process.env.VUE_APP_ROOT_API}todo/user/` + this.usuario.id)
             .then(response => response.json())
             .then(
-              notas => {
-                var notasDb = notas;
+              tareas => {
+                var tareasDb = tareas;
                 var n, i, j;
                 // buscamos la nota que acaba de ser actualizada, comparando con la bd.
-                for (i = 0; i < notasDb.length; i++) {
-                  for (j = 0; j < notasDb.length; j++) {
+                for (i = 0; i < tareasDb.length; i++) {
+                  for (j = 0; j < tareasDb.length; j++) {
                     if (
-                      notasDb[i].id == this.notas[j].id &&
-                      notasDb[i].completado != this.notas[j].completado
+                      tareasDb[i].id == this.tareas[j].id &&
+                      tareasDb[i].completado != this.tareas[j].completado
                     ) {
-                      n = this.notas[j]; // la nota que cambio de estado
+                      n = this.tareas[j]; // la nota que cambio de estado
                     }
                   }
                 }
-                this.actualizarNota(n);
+                this.cambiarEstadoTarea(n);
               },
               () => {
                 this.snackbar.message =
