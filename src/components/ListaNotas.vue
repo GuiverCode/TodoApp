@@ -44,7 +44,7 @@
 <script>
 import NotaItem from "./NotaItem";
 export default {
-  name: "tareas",
+  name: "notas",
   components: {
     NotaItem
   },
